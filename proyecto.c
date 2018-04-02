@@ -351,9 +351,3 @@ int main (void) {
    printf("Bipartito, esta funcion es Bipartito, y para este grafo me devuelve %i\n", Bipartito(mi_grafo));
 	return 0;
 }
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> 62492b2d2ba3a5390abc6eafba867cc8705f9e56
