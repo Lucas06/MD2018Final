@@ -3,6 +3,10 @@
 #include <assert.h>
 #include <stdint.h>
 #include <string.h>
+#include <stdbool.h>
+
+
+#include "queue.c"
 
 //include "proyecto.h"
 
@@ -16,24 +20,24 @@ typedef struct lado_t {
    u32 vertice_v;
 } lado;
 
-struct _Vecindad_t {
-	u32 vertice;
-	u32 grado;
-	u32 color;
-	u32 *puntero;
-};
+// struct _Vecindad_t {
+// 	u32 vertice;
+// 	u32 grado;
+// 	u32 color;
+// 	u32 *puntero;
+// };
 
-typedef struct _Vecindad_t Vecindad;
+// typedef struct _Vecindad_t Vecindad;
 
-struct _Vertice_t {
-	u32 nombre_real;
-	u32 etiqueta;
-	u32 color;
-	u32 grado;
-	Vecindad *vecinos;
-};
+// struct _Vertice_t {
+// 	u32 nombre_real;
+// 	u32 etiqueta;
+// 	u32 color;
+// 	u32 grado;
+// 	Vecindad *vecinos;
+// };
 
-typedef struct _Vertice_t *Vertice; 
+// typedef struct _Vertice_t *Vertice; 
 
 struct _Grafo_t
 {
@@ -236,11 +240,11 @@ u32 NumeroDeColores(Grafo G) {
 
 /* Funciones para extraer información de los vértices */
 
-
+/*
 u32 NombreDelVertice(Grafo G, u32 i){
 	return (G->vertice_array[i]->nombre_real);	
 }
-/*
+
 u32 ColorDelVertice(Grafo G, u32 i) {
 	return (G->vertice_array[i]->color);
 }
@@ -256,7 +260,63 @@ u32 NombreJotaesimoVecino(Grafo G, u32 i,u32 j) {
 */
 
 /* -------------------------------------------------------------------------------- */
+//  int Bipartito(Grafo G) {
+//    /* me aseguro de colorear todos los vertices con color 0*/  
+//    for (int i = 0; i < G->nro_aristas; i++) {
+//       G->vertice_array[i]->color = 0;
+//    }
+//    u32 iterator = 0;
+//    while (j < G->nro_vertices) {
+//       G->vertice_array[iterator]->color = 1
+//       iterator = iterator++;
+//       Queue *Q = NULL;
+//       Q = Queue_init(G->no_vertices);
+//       Enqueue(Q, &G->vertices_array[0]);
+//    }
 
+// }
+
+int Bipartito(Grafo G) {
+    int result = 1;
+    bool flag = false;
+
+    G->vertice_array[0]->color = 1;
+
+    for(u32 i = 1; i < G->nro_vertices; i++)
+        G->vertice_array[i]->color = 0;
+  
+    Queue *Q = NULL;
+    Q = Queue_init(G->nro_vertices);
+    Enqueue(Q, &G->vertice_array[0]);
+ 
+    while(!Queue_is_empty(Q) && !flag) {
+
+        //Vertice* V = Queue_front(Q);
+        Vertice V = Queue_front(Q);
+
+        Dequeue(Q);
+
+        for(u32 j = 0; j < V->grado; j++) {
+
+            //Vertice* W = V->vecindad[j];
+            //Vertice W = V->vecinos[j];
+            //Vertice W = G->vertice_array[j]->vecinos[j].vertice; nos falta la forma de que W sea el vecino j de V
+            Vertice W = &(G->vertice_array[j]);
+
+            if(W->color == 0) {
+                W->color = 3 - V->color;
+                Enqueue(Q, W);
+
+            } else if(W->color == V->color) {
+                result = 0;
+                flag = true;
+                break;
+            }
+        }
+    }
+    Queue_free(Q);
+    return result;
+}
 
 /* ---------------------------------------------------------------------------------------------------------------- */  
 
@@ -270,12 +330,15 @@ int main (void) {
 
 	// printf("Qué paso?");
 
-	printf("estoy probando la función NombreDelVertice con etiqueta 1 = %u\n", NombreDelVertice(mi_grafo, 1));
+	//printf("estoy probando la función NombreDelVertice con etiqueta 1 = %u\n", NombreDelVertice(mi_grafo, 1));
    // nota: se rompe cuando quiero agregar el grado para la funcion GradoDelVertice linea 180
 	// printf("estoy probando la función ColorDelVertice con etiqueta 1 = %u\n", ColorDelVertice(mi_grafo, 1));
 	// printf("estoy probando la función GradoDelVertice con etiqueta 1 = %u\n", GradoDelVertice(mi_grafo, 1));
 	// printf("estoy probando la función ColorJotaesimoVecino con etiqueta 1 = %u\n", ColorJotaesimoVecino(mi_grafo, 1, 1));
 	// printf("estoy probando la función NombreJotaesimoVecino con etiqueta 1 = %u\n", NombreJotaesimoVecino(mi_grafo, 1, 1));
+   printf("Bipartito, esta funcion es Bipartito, y para este grafo me devuelve %i\n", Bipartito(mi_grafo));
 	return 0;
 }
+
+
 
