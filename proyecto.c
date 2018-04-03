@@ -357,7 +357,8 @@ u32 i,j,k;
       (G->vertices_array[(G->orden[i])])->color = -1;                             //Le asigno color -1 al resto de los vertices
   }
 
-  int coloresdisponibles[cant_vertices];                                          //Creo un arrlego entero de W->v valores
+  u32 coloresdisponibles[cant_vertices];                                          //Creo un arrlego entero de W->v valores
+  u32 coloresazar[cant_vertices];
   for (x = 0; x < cant_vertices; x++) {
       coloresdisponibles[x] = 0;                                         //Le asigno 0 a cada valor del arreglo
   }
@@ -382,7 +383,7 @@ u32 i,j,k;
 
       color_a_usar = mi_rand() % (m+1);
 
-      (G->vertices_array[(G->orden[j])])->color = color_a_usar;
+      (G->vertices_array[(G->orden[j])])->color = coloresazar[color_a_usar];
 
       for (k = 0; k < (G->vertices_array[(G->orden[j])])->grado; k++) {
           index = G->vertices_array[(G->orden[j])]->vecinos[k];
