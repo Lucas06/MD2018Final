@@ -11,6 +11,7 @@
 //include "proyecto.h"
 
 #define BUFFER_SIZE 1024
+u32 seed;
 typedef uint32_t u32;
 typedef uint32_t size32;
 
@@ -53,16 +54,12 @@ typedef struct _Grafo_t *Grafo; /* *Grafo será un puntero a la estructura struc
 
 /* Funcion generadora de número pseudo-random */
 
-/*
-u16 lfsr = 0xACE1u;
-u16 bit;
+u32 mi_rand() {
+   u32 bit;
+   bit  = ((semilla >> 0) ^ (semilla >> 2) ^ (semilla >> 3) ^ (semilla >> 5) ) & 1;
+   return semilla =  (semilla >> 1) | (bit << 31);
+}
 
- unsigned rand()
- {
-   bit  = ((lfsr >> 0) ^ (lfsr >> 2) ^ (lfsr >> 3) ^ (lfsr >> 5) ) & 1;
-   return lfsr =  (lfsr >> 1) | (bit << 15);
- }
-*/
 /* Funciones de comparación */
 
 int comparar_vertices_u(const void* a, const void* b) {
@@ -268,7 +265,7 @@ u32 ColorJotaesimoVecino(Grafo G, u32 i, u32 j) {
 }
 u32 NombreJotaesimoVecino(Grafo G, u32 i,u32 j) {
 	return (G->vertice_array[i]->vecinos[j].vertice);
-}c
+}
 */
 
 /* -------------------------------------------------------------------------------- */
@@ -331,7 +328,74 @@ int Bipartito(Grafo G) {
 }
 
 /* ---------------------------------------------------------------------------------------------------------------- */
+/*
+u32 NotSoGreedy(Grafo G,u32 semilla) {
+  seed = semilla;
 
+
+Fuente: http://www.geeksforgeeks.org/graph-coloring-set-2-greedy-algorithm/
+
+1. Color first vertex with first color.
+2. Do following for remaining V-1 vertices.
+        a) Consider the currently picked vertex and color it with the
+           lowest numbered color that has not been used on any previously
+           colored vertices adjacent to it. If all previously used colors
+           appear on vertices adjacent to v, assign a new color to it.
+
+
+
+u32 i,j,k;
+  u32 x;
+  u32 m = 0;
+  u32 color_a_usar;
+  u32 highestcolor = 0;                                                 //Color 0 en caso de recibir un grafo NULL
+  u32 cant_vertices = NumeroDeVertices(G);
+
+  (G-> vertice_array[(G->orden[0])])->color = 1;                                  //Le asigno color 1 al primer vertice
+
+  for (i = 1; i < cant_vertices; i++) {
+      (G->vertices_array[(G->orden[i])])->color = -1;                             //Le asigno color -1 al resto de los vertices
+  }
+
+  int coloresdisponibles[cant_vertices];                                          //Creo un arrlego entero de W->v valores
+  for (x = 0; x < cant_vertices; x++) {
+      coloresdisponibles[x] = 0;                                         //Le asigno 0 a cada valor del arreglo
+  }
+
+  u32 index;
+  for (j = 1; j < cant_vertices; j++) {                                           //Recorro j
+
+      for (k = 0; k < (G->vertices_array[(G->orden[j])])->grado; k++) {           //Recorro k vecinos de j
+          index = G->vertices_array[(G->orden[j])]->vecinos[k];
+          if (G->vertices_array[index]->color != -1) {                            //Si el color en el k vecino de j no es -1 (Ya esta pintado)
+              coloresdisponibles[(G->vertices_array[index])->color] = 1;          //Marco en mi arreglo de colores como 1 en la posicion color de k
+          }                                                              //De esta forma sabemos que el color igual al indice de esa posicion
+      }                                                                  //No puede ser usado para pintar j
+
+      for (x = 1; x < cant_vertices; x++) {
+          if (coloresdisponibles[x] == 0) {                            //Recorro el arreglo hasta encontrar un color disponible
+            coloresazar[m] = x;                                        //Pongo el color disponible en el arreglo de colores al azar
+            m++;
+          }
+        }
+      }
+
+      color_a_usar = mi_rand() % (m+1);
+
+      (G->vertices_array[(G->orden[j])])->color = color_a_usar;
+
+      for (k = 0; k < (G->vertices_array[(G->orden[j])])->grado; k++) {
+          index = G->vertices_array[(G->orden[j])]->vecinos[k];
+          if (G->vertices_array[index]->color != -1) {
+              coloresdisponibles[(G->vertices_array[index])->color] = 0;          //Ajusto mi arreglo de colores para mi proximo j
+          }
+      }
+  }
+
+  return highestcolor;
+}
+*/
+/* ---------------------------------------------------------------------------------------------------------------- */
 int main (void) {
 	Grafo mi_grafo = NULL;
 	mi_grafo = ConstruccionDelGrafo();
