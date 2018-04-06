@@ -52,7 +52,7 @@ struct _Grafo_t
 
 typedef struct _Grafo_t *Grafo; /* *Grafo será un puntero a la estructura struct _Grafo_t */
 
-/* Funcion generadora de número pseudo-random */
+/* Función generadora de número pseudo-random */
 
 u32 mi_rand() {
    u32 bit;
@@ -143,7 +143,7 @@ Grafo ConstruccionDelGrafo() {
          lado* espejo_vu = NULL; // 'Lado backward' v-u.
          u32 indice_espejado = 0; // Indice que recorre el arreglo de lados espejados.
 
-         Vertice vertice = malloc(n_vertices*sizeof(struct _Vertice_t)); // arreglo de vertices
+         Vertice vertice = malloc(n_vertices*sizeof(struct _Vertice_t)); // puntero de arreglo a vertices
          u32 indice_vertice = 0;
 
          while(fgets(linea, sizeof(linea), stdin)) {
